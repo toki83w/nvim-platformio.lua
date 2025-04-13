@@ -5,7 +5,7 @@
 -- *: Any number of arguments (including none).
 -- +: At least one argument.
 -- -1: Zero or one argument (like ?, explicitly).
-local platformio = require('platformio')
+local platformio = require 'platformio'
 
 -- Pioinit
 vim.api.nvim_create_user_command('Pioinit', function()
@@ -46,6 +46,11 @@ vim.api.nvim_create_user_command('Piolib', function(opts)
 end, {
   nargs = '+',
 })
+
+-- Pioenv
+vim.api.nvim_create_user_command('Pioenv', function()
+  require('platformio.pioenv').pioenv()
+end, {})
 
 -- Piocmd
 vim.api.nvim_create_user_command('Piocmd', function(opts)

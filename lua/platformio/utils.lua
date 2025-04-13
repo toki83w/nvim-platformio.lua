@@ -4,18 +4,15 @@ local M = {}
 M.extra = ' && echo . && echo . && echo Please Press ENTER to continue'
 
 function M.strsplit(inputstr, del)
-  local t = {}
-  for str in string.gmatch(inputstr, '([^' .. del .. ']+)') do
-    table.insert(t, str)
-  end
-  return t
-end
-
-local function pathmul(n)
-  return '..' .. string.rep('/..', n)
+    local t = {}
+    for str in string.gmatch(inputstr, "([^" .. del .. "]+)") do
+        table.insert(t, str)
+    end
+    return t
 end
 
 ----------------------------------------------------------------------------------------
+
 local platformio = vim.api.nvim_create_augroup('platformio', { clear = true })
 function M.ToggleTerminal(command, direction, title)
   --
@@ -112,14 +109,10 @@ function M.ToggleTerminal(command, direction, title)
   terminal:toggle()
 end
 
--- remove un-needed function
-
 local is_windows = jit.os == 'Windows'
---
 M.devNul = is_windows and ' 2>./nul' or ' 2>/dev/null'
-----------------------------------------------------------------------------------------
 
-local paths = { '.', '..', pathmul(1), pathmul(2), pathmul(3), pathmul(4), pathmul(5) }
+----------------------------------------------------------------------------------------
 
 function M.file_exists(name)
   local f = io.open(name, 'r')
@@ -132,12 +125,11 @@ function M.file_exists(name)
 end
 
 function M.cd_pioini()
-  for _, path in pairs(paths) do
-    if M.file_exists(path .. '/platformio.ini') then
-      vim.cmd('cd ' .. path)
-      break
-    end
+  if not M.file_exists 'platformio.ini' then
+    vim.notify('platformio.ini not found in current directory', vim.log.levels.ERROR)
+    return false
   end
+  return true
 end
 
 function M.pio_install_check()
@@ -151,5 +143,129 @@ function M.pio_install_check()
   end
   return true
 end
+
+----------------------------------------------------------------------------------------
+
+M.default_env = '__default__'
+
+M.env_args = function()
+  local env = require('platformio').config.active_env
+  return env == M.default_env and '' or (' -e ' .. env)
+end
+
+M.get_envs = function()
+  local envs = { M.default_env }
+
+  local parse_ini = function()
+    for line in io.lines 'platformio.ini' do
+      local _, _, env = string.find(line, '^%[env:(%S+)%]$')
+      if env then
+        print('environment:', env)
+        table.insert(envs, env)
+      end
+    end
+  end
+
+  if pcall(parse_ini) then
+    return envs
+  else
+    return {}
+  end
+end
+
+----------------------------------------------------------------------------------------
+
+M.pick_string = function(title, prompt, strings, callback)
+  local pickers = require 'telescope.pickers'
+  local finders = require 'telescope.finders'
+  local telescope_conf = require('telescope.config').values
+  local actions = require 'telescope.actions'
+  local action_state = require 'telescope.actions.state'
+
+  local opts = {}
+  pickers
+    .new(opts, {
+      prompt_title = prompt,
+      results_title = title,
+      finder = finders.new_table {
+        results = strings,
+      },
+      attach_mappings = function(prompt_bufnr, _)
+        actions.select_default:replace(function()
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          callback(selection[1])
+        end)
+        return true
+      end,
+      sorter = telescope_conf.generic_sorter(opts),
+    })
+    :find()
+end
+
+----------------------------------------------------------------------------------------
+
+local decode_json = function(path)
+  local file = io.open(path, 'rb')
+
+  if not file then
+    return {}
+  end
+
+  local content = file:read '*a'
+  file:close()
+
+  return vim.json.decode(content) or {}
+end
+
+local encode_json = function(path, pio)
+  local file = io.open(path, 'wb')
+
+  if not file then
+    return false
+  end
+
+  file:write(vim.json.encode(pio))
+  file:close()
+
+  return true
+end
+
+M.get_json_conf = function()
+  local path = vim.fs.joinpath('.nvim', 'pio.json')
+
+  if not M.file_exists(path) then
+    return nil
+  end
+
+  return decode_json(path)
+end
+
+M.set_json_conf = function(pio)
+  if not M.cd_pioini() then
+    return false
+  end
+
+  if not vim.fn.mkdir('.nvim', 'p') then
+    vim.notify('Failed to create directory: .nvim', vim.log.levels.ERROR)
+    return false
+  end
+
+  local path = vim.fs.joinpath('.nvim', 'pio.json')
+  if not encode_json(path, pio) then
+    vim.notify('Failed to write to file: ' .. path, vim.log.levels.ERROR)
+    return false
+  end
+
+  return true
+end
+
+M.json_conf = function(data)
+  local pio = M.get_json_conf() or {}
+  pio = vim.tbl_deep_extend('force', pio, data or {})
+  return M.set_json_conf(pio)
+end
+
+----------------------------------------------------------------------------------------
 
 return M

@@ -19,6 +19,15 @@ USAGE                                                    *platformio-usage*
                          another for choosing the framework. Press enter to
                          complete the initialization.
 
+                                   *:Pioenv*
+:Pioenv                  Open a telescope picker to select the active
+                         platformio environment. Applies to subsequent calls to
+                         `:Piorun`, `:Piolib`, `:Piodb` and `:Piomon`.
+
+                                   *:Piodb*
+:Piodb                   Rebuild the compile_commands.json file for the
+                         current environment.
+
                                    *:Piorun*
 :Piorun [arg]            This command builds and uploads the code. Optional
                          arguments: build, upload, clean. If no argument is
@@ -30,7 +39,7 @@ USAGE                                                    *platformio-usage*
                             `:Piorun clean`
 
                                    *:Piocmd*
-:Piocmd [cmd]           Run PlatformIO commands. Example: `:Piocmd device list`.
+:Piocmd [cmd]            Run PlatformIO commands. Example: `:Piocmd device list`.
                          The command argument is optional. If not provided, it
                          opens a floating toggleterm in the project root where
                          you can execute commands. Note: `pio` keyword is not
@@ -42,7 +51,7 @@ USAGE                                                    *platformio-usage*
                             `:Piocmd boards arduinouno --json-output`
 
                                    *:Piolib*
-:Piolib [libname]       Install a library by providing a keyword for search. A
+:Piolib [libname]        Install a library by providing a keyword for search. A
                          telescope picker will show available libraries. Pick
                          one and press enter to install.
                          Examples:
@@ -50,7 +59,7 @@ USAGE                                                    *platformio-usage*
                             `:Piolib keyboard`
 
                                    *:Piomon*
-:Piomon [baud_rate]     Open a serial monitor. Specify a baud rate as an
+:Piomon [baud_rate]      Open a serial monitor. Specify a baud rate as an
                          optional argument. If not provided, it uses the default
                          baud rate (9600) or the one specified in platformio.ini.
                          Examples:
@@ -58,7 +67,7 @@ USAGE                                                    *platformio-usage*
                             `:Piomon 115200`
 
                                    *:Piodebug*
-:Pidebug		 Starts the default PlatformIO debugger with gdb
+:Pidebug                 Starts the default PlatformIO debugger with gdb
 ==============================================================================
 
 vim:tw=78:sw=4:ts=8:ft=help:norl:noet:

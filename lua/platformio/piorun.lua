@@ -3,26 +3,38 @@ local M = {}
 local utils = require 'platformio.utils'
 
 function M.piobuild()
-  utils.cd_pioini()
-  local command = 'pio run' .. utils.extra
+  if not utils.cd_pioini() then
+    return
+  end
+
+  local command = 'pio run' .. utils.env_args() .. utils.extra
   utils.ToggleTerminal(command, 'float')
 end
 
 function M.pioupload()
-  utils.cd_pioini()
-  local command = 'pio run --target upload' .. utils.extra
+  if not utils.cd_pioini() then
+    return
+  end
+
+  local command = 'pio run --target upload' .. utils.env_args() .. utils.extra
   utils.ToggleTerminal(command, 'float')
 end
 
 function M.piouploadfs()
-  utils.cd_pioini()
-  local command = 'pio run --target uploadfs' .. utils.extra
+  if not utils.cd_pioini() then
+    return
+  end
+
+  local command = 'pio run --target uploadfs' .. utils.env_args() .. utils.extra
   utils.ToggleTerminal(command, 'float')
 end
 
 function M.pioclean()
-  utils.cd_pioini()
-  local command = 'pio run --target clean' .. utils.extra
+  if not utils.cd_pioini() then
+    return
+  end
+
+  local command = 'pio run --target clean' .. utils.env_args() .. utils.extra
   utils.ToggleTerminal(command, 'float')
 end
 

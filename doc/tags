@@ -1,8 +1,11 @@
+:Piocmd	platformio.txt	/*:Piocmd*
+:Piodb	platformio.txt	/*:Piodb*
+:Piodebug	platformio.txt	/*:Piodebug*
+:Pioenv	platformio.txt	/*:Pioenv*
 :Pioinit	platformio.txt	/*:Pioinit*
-:Piorun	    platformio.txt	/*:Piorun*
-:Piolib 	platformio.txt	/*:Piolib*
-:Piocmd 	platformio.txt	/*:Piocmd*
-:Piomon 	platformio.txt	/*:Piomon*
-PlatfromIO	platformio.txt	/*PlatfromIO*
+:Piolib	platformio.txt	/*:Piolib*
+:Piomon	platformio.txt	/*:Piomon*
+:Piorun	platformio.txt	/*:Piorun*
+PlatformIO	platformio.txt	/*PlatformIO*
 platformio-usage	platformio.txt	/*platformio-usage*
-platformio.txt	platformio.txt	/*platformio.txt*
+platformio.lua	platformio.txt	/*platformio.lua*

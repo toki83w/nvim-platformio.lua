@@ -74,6 +74,7 @@ cmd = {
     "Piomon",
     "Piodebug",
     "Piodb",
+    "Pioenv",
 },
 ```
 

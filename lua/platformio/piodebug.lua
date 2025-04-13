@@ -1,4 +1,4 @@
-local utils = require("platformio.utils")
+local utils = require 'platformio.utils'
 local M = {}
 
 function M.piodebug(args_table)
@@ -6,10 +6,12 @@ function M.piodebug(args_table)
     return
   end
 
-  utils.cd_pioini()
+  if not utils.cd_pioini() then
+    return
+  end
 
-  local command = string.format("pio debug --interface=gdb -- -x .pioinit %s", utils.extra)
-  utils.ToggleTerminal(command, "float")
+  local command = string.format('pio debug --interface=gdb -- -x .pioinit %s', utils.extra)
+  utils.ToggleTerminal(command, 'float')
 end
 
 return M

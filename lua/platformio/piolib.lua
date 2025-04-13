@@ -60,7 +60,12 @@ local function pick_library(json_data)
           local selection = action_state.get_selected_entry()
           local pkg_name = selection['value']['owner'] .. '/' .. selection['value']['name']
           -- Run compiledb targets after installing library to environments declared in “platformio.ini”
-          local command = 'pio pkg install --library "' .. pkg_name .. '"' .. (config.lsp == 'clangd' and ' && pio run -t compiledb ' or '') .. utils.extra
+          local command = 'pio pkg install --library "'
+            .. pkg_name
+            .. '"'
+            .. utils.env_args()
+            .. (config.lsp == 'clangd' and ' && pio run -t compiledb' .. utils.env_args() or '')
+            .. utils.extra
           utils.ToggleTerminal(command, 'float')
         end)
         return true
