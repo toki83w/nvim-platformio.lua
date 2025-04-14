@@ -3,7 +3,7 @@ local utils = require 'platformio.utils'
 local M = {}
 
 local default_config = {
-  lsp = 'ccls',
+  lsp = 'clangd',
   active_env = utils.default_env,
 }
 
