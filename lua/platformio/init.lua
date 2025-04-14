@@ -26,7 +26,6 @@ function M.setup(user_config)
     local json_conf = utils.get_json_conf()
     if json_conf and json_conf.active_env then
         M.config.active_env = json_conf.active_env
-        vim.notify("Restored active environment: " .. M.config.active_env, vim.log.levels.INFO)
     end
 end
 

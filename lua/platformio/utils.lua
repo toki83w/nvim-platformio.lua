@@ -127,9 +127,11 @@ function M.file_exists(name)
     end
 end
 
-function M.cd_pioini()
+function M.cd_pioini(skip_notify)
     if not M.file_exists("platformio.ini") then
-        vim.notify("platformio.ini not found in current directory", vim.log.levels.ERROR)
+        if not skip_notify then
+            vim.notify("platformio.ini not found in current directory", vim.log.levels.ERROR)
+        end
         return false
     end
     return true
