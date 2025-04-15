@@ -14,13 +14,14 @@ end
 ----------------------------------------------------------------------------------------
 
 local platformio = vim.api.nvim_create_augroup("platformio", { clear = true })
-function M.ToggleTerminal(command, direction, title, on_exit)
+function M.ToggleTerminal(command, direction, title, on_exit, count)
     --
     local Terminal = require("toggleterm.terminal").Terminal
     local terminal = Terminal:new({
         cmd = command,
         direction = direction,
         close_on_exit = false,
+        count = count or 43,
 
         on_open = function(t)
             --Only to set Piomon toggleterm winbar title/message
