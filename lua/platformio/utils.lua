@@ -14,7 +14,7 @@ end
 ----------------------------------------------------------------------------------------
 
 local platformio = vim.api.nvim_create_augroup("platformio", { clear = true })
-function M.ToggleTerminal(command, direction, title)
+function M.ToggleTerminal(command, direction, title, on_exit)
     --
     local Terminal = require("toggleterm.terminal").Terminal
     local terminal = Terminal:new({
@@ -108,6 +108,8 @@ function M.ToggleTerminal(command, direction, title)
                 })
             end
         end,
+
+        on_exit = on_exit,
     })
     terminal:toggle()
 end
@@ -209,6 +211,45 @@ M.pick_string = function(title, prompt, strings, callback)
         :find()
 end
 
+M.write_file = function(path, content)
+    local dir = vim.fs.dirname(path)
+
+    if not vim.fn.mkdir(dir, "p") then
+        vim.notify("Failed to create directory: " .. dir, vim.log.levels.ERROR)
+        return false
+    end
+
+    local file, err = io.open(path, "w")
+
+    if not file then
+        vim.notify("Failed to write file " .. path .. ": " .. err, vim.log.levels.ERROR)
+        return false
+    end
+
+    file:write(content)
+    file:close()
+
+    return true
+end
+
+M.append_file = function(path, content)
+    local file, err = io.open(path, "a")
+
+    if not file then
+        vim.notify("Failed to append file " .. path .. ": " .. err, vim.log.levels.ERROR)
+        return false
+    end
+
+    file:write(content)
+    file:close()
+
+    return true
+end
+
+M.delete_file = function(path)
+    return vim.fn.delete(path) == 0
+end
+
 ----------------------------------------------------------------------------------------
 
 local decode_json = function(path)
@@ -222,19 +263,6 @@ local decode_json = function(path)
     file:close()
 
     return vim.json.decode(content) or {}
-end
-
-local encode_json = function(path, pio)
-    local file = io.open(path, "wb")
-
-    if not file then
-        return false
-    end
-
-    file:write(vim.json.encode(pio))
-    file:close()
-
-    return true
 end
 
 M.get_json_conf = function()
@@ -252,18 +280,7 @@ M.set_json_conf = function(pio)
         return false
     end
 
-    if not vim.fn.mkdir(".nvim", "p") then
-        vim.notify("Failed to create directory: .nvim", vim.log.levels.ERROR)
-        return false
-    end
-
-    local path = vim.fs.joinpath(".nvim", "pio.json")
-    if not encode_json(path, pio) then
-        vim.notify("Failed to write to file: " .. path, vim.log.levels.ERROR)
-        return false
-    end
-
-    return true
+    return M.write_file(vim.fs.joinpath(".nvim", "pio.json"), vim.json.encode(pio))
 end
 
 M.json_conf = function(data)
