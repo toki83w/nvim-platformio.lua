@@ -11,7 +11,7 @@ function M.piocmd(cmd_table)
     end
 
     if cmd_table[1] == "" then
-        vim.cmd("2ToggleTerm direction=float")
+        vim.cmd("43ToggleTerm direction=float")
     else
         local cmd = "pio "
         for _, v in pairs(cmd_table) do
