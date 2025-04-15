@@ -11,6 +11,43 @@ local utils = require("platformio.utils")
 local previewers = require("telescope.previewers")
 local config = require("platformio").config
 
+local pio_env = [[
+import os, re
+Import("env")
+
+# include toolchain paths
+env.Replace(COMPILATIONDB_INCLUDE_TOOLCHAIN=True)
+
+# override compilation DB path
+env.Replace(COMPILATIONDB_PATH=os.path.join(".pio", "build", "compile_commands.json"))
+
+# patch the lsp.json
+try:
+    with open(".nvim/lsp.json", 'r') as file:
+        file_content = file.read()
+
+    current_dir = os.getcwd()
+    modified_content = re.sub(r'"--compile-commands-dir=.*"', f'"--compile-commands-dir={current_dir}/.pio/build"', file_content)
+
+    with open(".nvim/lsp.json", 'w') as file:
+        file.write(modified_content)
+except:
+    pass
+]]
+
+local lsp_json = [[
+{
+    "clangd": {
+        "cmd" : [
+            "clangd",
+            "--background-index",
+            "--header-insertion=never",
+            "--compile-commands-dir=.pio/build"
+        ]
+    }
+}
+]]
+
 local boardentry_maker = function(opts)
     local displayer = entry_display.create({
         separator = "▏",
@@ -64,7 +101,23 @@ local function pick_framework(board_details)
                         .. '"'
                         .. (config.lsp == "clangd" and " && pio run -t compiledb " or "")
                         .. utils.extra
-                    utils.ToggleTerminal(command, "float")
+                    utils.ToggleTerminal(command, "float", nil, function()
+                        if config.lsp ~= "clangd" then
+                            return
+                        end
+
+                        if utils.write_file("pio_env.py", pio_env) then
+                            vim.notify("Created file pio_env.py", vim.log.levels.INFO)
+                        end
+
+                        if utils.write_file(vim.fs.joinpath(".nvim", "lsp.json"), lsp_json) then
+                            vim.notify("Created file .nvim/lsp.json", vim.log.levels.INFO)
+                        end
+
+                        if utils.append_file("platformio.ini", "extra_scripts = pre:pio_env.py") then
+                            vim.notify("Set extra_scripts in platformio.ini", vim.log.levels.INFO)
+                        end
+                    end)
                 end)
                 return true
             end,
