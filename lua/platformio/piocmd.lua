@@ -17,8 +17,7 @@ function M.piocmd(cmd_table)
         for _, v in pairs(cmd_table) do
             cmd = cmd .. " " .. v
         end
-        local command = cmd .. utils.extra
-        utils.ToggleTerminal(command, "float")
+        utils.ToggleTerminal(cmd, "float")
     end
 end
 

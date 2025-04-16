@@ -22,7 +22,7 @@ function M.pioenv()
         vim.notify("Active environment: " .. selected_env, vim.log.levels.INFO)
         utils.json_conf({ active_env = selected_env })
         if config.lsp == "clangd" then
-            local command = "pio run -t compiledb" .. utils.env_args() .. utils.extra
+            local command = "pio run -t compiledb" .. utils.env_args()
             utils.ToggleTerminal(command, "float")
         end
     end)
