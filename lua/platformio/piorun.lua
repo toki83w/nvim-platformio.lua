@@ -7,7 +7,7 @@ function M.piobuild()
         return
     end
 
-    local command = "pio run" .. utils.env_args() .. utils.extra
+    local command = "pio run" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
 end
 
@@ -16,7 +16,7 @@ function M.pioupload()
         return
     end
 
-    local command = "pio run --target upload" .. utils.env_args() .. utils.extra
+    local command = "pio run --target upload" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
 end
 
@@ -25,7 +25,7 @@ function M.piouploadfs()
         return
     end
 
-    local command = "pio run --target uploadfs" .. utils.env_args() .. utils.extra
+    local command = "pio run --target uploadfs" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
 end
 
@@ -34,7 +34,7 @@ function M.pioclean()
         return
     end
 
-    local command = "pio run --target clean" .. utils.env_args() .. utils.extra
+    local command = "pio run --target clean" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
 end
 

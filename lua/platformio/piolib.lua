@@ -65,7 +65,7 @@ local function pick_library(json_data)
                         .. '"'
                         .. utils.env_args()
                         .. (config.lsp == "clangd" and " && pio run -t compiledb" .. utils.env_args() or "")
-                        .. utils.extra
+
                     utils.ToggleTerminal(command, "float")
                 end)
                 return true

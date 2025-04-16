@@ -17,7 +17,7 @@ function M.piomon(args_table)
         local baud_rate = args_table[1]
         command = string.format("pio device monitor -b %s%s", baud_rate, utils.env_args())
     end
-    utils.ToggleTerminal(command, "horizontal", "Press [Ctrl+C] then press ENTER to exit", nil, 44)
+    utils.ToggleTerminal(command, "horizontal", nil, 44)
 end
 
 return M

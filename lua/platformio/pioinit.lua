@@ -92,8 +92,8 @@ local function pick_framework(board_details)
                         .. selected_framework
                         .. '"'
                         .. (config.lsp == "clangd" and " && pio run -t compiledb " or "")
-                        .. utils.extra
-                    utils.ToggleTerminal(command, "float", nil, function()
+
+                    utils.ToggleTerminal(command, "float", function()
                         if config.lsp ~= "clangd" then
                             return
                         end
