@@ -10,6 +10,8 @@ function M.piodebug(args_table)
         return
     end
 
+    utils.autosave()
+
     local command = "pio debug --interface=gdb -- -x .pioinit"
     utils.ToggleTerminal(command, "tab")
 end

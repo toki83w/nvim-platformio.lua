@@ -4,6 +4,7 @@ local M = {}
 
 local default_config = {
     lsp = "clangd",
+    autosave = true,
     active_env = utils.default_env,
 }
 
@@ -12,6 +13,7 @@ M.config = vim.deepcopy(default_config)
 function M.setup(user_config)
     local valid_keys = {
         lsp = true,
+        autosave = true,
     }
     for key, _ in pairs(user_config or {}) do
         if not valid_keys[key] then

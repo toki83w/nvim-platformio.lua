@@ -10,6 +10,8 @@ function M.piomon(args_table)
         return
     end
 
+    utils.autosave()
+
     local command
     if args_table[1] == "" then
         command = "pio device monitor" .. utils.env_args()

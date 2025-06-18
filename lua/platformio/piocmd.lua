@@ -10,6 +10,8 @@ function M.piocmd(cmd_table)
         return
     end
 
+    utils.autosave()
+
     if cmd_table[1] == "" then
         vim.cmd("43ToggleTerm direction=float")
     else

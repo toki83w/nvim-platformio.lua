@@ -12,6 +12,8 @@ function M.pioenv()
         return
     end
 
+    utils.autosave()
+
     local envs = utils.get_envs()
     if #envs == 0 then
         return

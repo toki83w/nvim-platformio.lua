@@ -7,6 +7,8 @@ function M.piobuild()
         return
     end
 
+    utils.autosave()
+
     local command = "pio run" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
 end
@@ -15,6 +17,8 @@ function M.pioupload()
     if not utils.cd_pioini() then
         return
     end
+
+    utils.autosave()
 
     local command = "pio run --target upload" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
@@ -25,6 +29,8 @@ function M.piouploadfs()
         return
     end
 
+    utils.autosave()
+
     local command = "pio run --target uploadfs" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")
 end
@@ -33,6 +39,8 @@ function M.pioclean()
     if not utils.cd_pioini() then
         return
     end
+
+    utils.autosave()
 
     local command = "pio run --target clean" .. utils.env_args()
     utils.ToggleTerminal(command, "tab")

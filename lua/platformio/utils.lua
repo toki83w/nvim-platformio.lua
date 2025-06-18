@@ -77,6 +77,13 @@ function M.pio_install_check()
     return true
 end
 
+function M.autosave()
+    local config = require("platformio").config
+    if config.autosave then
+        vim.cmd("wa")
+    end
+end
+
 ----------------------------------------------------------------------------------------
 
 M.default_env = "__default__"
